@@ -9,12 +9,14 @@ import (
     _ "github.com/go-sql-driver/mysql"
 )
 
+var db *sql.DB
+
 func init_db() (*sql.DB, error) {
     username := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWD")
     database := os.Getenv("DB")
     dsn := fmt.Sprintf("%s:%s@tcp(localhost:8080)/%s", username, password, database)
-    db, err := sql.Open("mysql", dsn)
+    db, err = sql.Open("mysql", dsn)
     if err != nil {
         return db, errors.New("Error creating the database pointer")
     }
@@ -22,7 +24,7 @@ func init_db() (*sql.DB, error) {
     return db, nil
 }
 
-func create_tables(db *sql.DB) (error) {
+func create_tables() (error) {
     user_table := `CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
