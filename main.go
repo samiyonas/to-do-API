@@ -40,6 +40,7 @@ func main() {
     // register different routes to our router
     r.Post("/register", handlers.Add_user)
     r.Post("/addtask", handlers.Add_task)
+    r.Get("/taskbyid/{userID}", handlers.Task_by_Id)
 
     // start serving on port 8080 localhost using chi object
     http.ListenAndServe(":8080", r)
