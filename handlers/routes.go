@@ -15,21 +15,21 @@ func Task_by_Id(w http.ResponseWriter, r *http.Request) {
 
     taskId, err := strconv.Atoi(task_id)
     if err != nil {
-        http.Error(w, "Error retrieveing URL Param", http.StatusInternalServerError)
+        http.Error(w, "Error retrieveing URL Param\n", http.StatusInternalServerError)
     }
 
     task, err := models.Task_by_Id(taskId)
     if err != nil {
         if err == sql.ErrNoRows{
-            http.Error(w, "User not found", http.StatusNotFound)
+            http.Error(w, "User not found\n", http.StatusNotFound)
             return
         }
-        http.Error(w, fmt.Sprintf("Error querying task %v", err), http.StatusInternalServerError)
+        http.Error(w, fmt.Sprintf("Error querying task %v\n", err), http.StatusInternalServerError)
     }
 
     jsonData, err := json.Marshal(task)
     if err != nil {
-        http.Error(w, "couldn't decode your task", http.StatusInternalServerError)
+        http.Error(w, "couldn't decode your task\n", http.StatusInternalServerError)
         return
     }
 
