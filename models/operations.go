@@ -4,7 +4,7 @@ import (
     "errors"
 )
 
-func Add_user(user User) (error) {
+func Add_user(user User) (int64, error) {
     query := "SELECT * FROM user WHERE email = ?"
     result, err := db.Query(query, user.Email)
     if err != nil {
@@ -15,10 +15,29 @@ func Add_user(user User) (error) {
         return errors.New("email already exists")
     }
     cmd := "INSERT INTO (name, email) VALUES (?, ?)"
-    _, err = db.Exec(cmd, user.Name, user.Email)
+    info, err = db.Exec(cmd, user.Name, user.Email)
     if err != nil {
         return errors.New("not inserted")
     }
+    id, err := info.LastInsertedId()
+    if err != nil {
+        return -1, errors.New("not the right ID")
+    }
 
-    return nil
+    return id, nil
+}
+
+func Add_task(task Task) (int64, error) {
+    cmd := "INSERT INTO todo (user_id, title, content, done) VALUES(?, ?, ?, ?)"
+
+    info, err := db.Exec(cmd, task.User_id, task.Title, task.Content, task.Done)
+    if err != nil {
+        return errors.New("task not added")
+    }
+    id, err := info.LastInsertedId()
+    if err != nil {
+        return -1, errors.New("not the right ID")
+    }
+
+    return nil, id
 }
