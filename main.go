@@ -1,36 +1,46 @@
 package main
 
+// Entry point of the API
+
 import (
     "fmt"
     "net/http"
     "github.com/samiyonas/to-do-API/handlers"
     "github.com/samiyonas/to-do-API/models"
+    "github.com/go-chi/chi/v5"
 )
 
-
-
 func main() {
+    // database initialization and error handling
     Db, err := models.Init_db()
     if err != nil {
         fmt.Println(err.Error())
         return
     }
 
+    // checking database connection and if not connected error is handled
     err = Db.Ping()
     if err != nil {
         fmt.Println("Error connecting to the database:", err)
     }
 
+    // closing the DB connection gracefully if the server crashes
     defer Db.Close()
 
+    // create the tables if they don't exist and error handling
     err = models.Create_tables()
     if err != nil {
         fmt.Println(err.Error())
         return
     }
 
-    http.HandleFunc("/register", handlers.Add_user)
-    http.HandleFunc("/addtask", handlers.Add_task)
+    // chi router object
+    r := chi.NewRouter()
 
-    http.ListenAndServe(":8080", nil)
+    // register different routes to our router
+    r.Post("/register", handlers.Add_user)
+    r.Post("/addtask", handlers.Add_task)
+
+    // start serving on port 8080 localhost using chi object
+    http.ListenAndServe(":8080", r)
 }
