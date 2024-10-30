@@ -11,7 +11,7 @@ func Add_user(w http.ResponseWriter, r *http.Request) {
     var user models.User
 
     if r.Method != http.MethodPost {
-        http.Error(w, "Unsupported request method", http.StatusMethodNotAllowed)
+        http.Error(w, "Unsupported request method\n", http.StatusMethodNotAllowed)
         return
     }
 
@@ -20,17 +20,17 @@ func Add_user(w http.ResponseWriter, r *http.Request) {
 
     err := decoder.Decode(&user)
     if err != nil {
-        http.Error(w, "could not decode user info", http.StatusBadRequest)
+        http.Error(w, "could not decode user info\n", http.StatusBadRequest)
         return
     }
 
     id, err := models.Add_user(user)
     if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
+        http.Error(w, fmt.Sprintf("couldn't add you\n", err), http.StatusInternalServerError)
         return
     }
 
-    ret := fmt.Sprintf("You've been added and your ID is %d", id)
+    ret := fmt.Sprintf("You've been added and your ID is %d\n", id)
 
     w.Write([]byte(ret))
 }
@@ -38,7 +38,7 @@ func Add_user(w http.ResponseWriter, r *http.Request) {
 func Add_task(w http.ResponseWriter, r *http.Request) {
     var task models.Task
     if r.Method != http.MethodPost {
-        http.Error(w, "Unsupported request method", http.StatusMethodNotAllowed)
+        http.Error(w, "Unsupported request method\n", http.StatusMethodNotAllowed)
         return
     }
 
@@ -47,7 +47,7 @@ func Add_task(w http.ResponseWriter, r *http.Request) {
 
     err := decoder.Decode(&task)
     if err != nil {
-        http.Error(w, "could not decode the task", http.StatusBadRequest)
+        http.Error(w, "could not decode the task\n", http.StatusBadRequest)
         return
     }
 
@@ -56,6 +56,6 @@ func Add_task(w http.ResponseWriter, r *http.Request) {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-    ret := fmt.Sprintf("Your task has been added! You're task ID is %d", id)
+    ret := fmt.Sprintf("Your task has been added! You're task ID is %d\n", id)
     w.Write([]byte(ret))
 }
