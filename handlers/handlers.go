@@ -1,13 +1,14 @@
 package handlers
 
 import (
+    "fmt"
     "encoding/json"
     "net/http"
-    "models"
+    "github.com/samiyonas/to-do-API/models"
 )
 
-func add_user(w http.ResponseWriter, r *http.Request) {
-    var user User
+func Add_user(w http.ResponseWriter, r *http.Request) {
+    var user models.User
 
     if r.Method != http.MethodPost {
         http.Error(w, "Unsupported request method", http.StatusMethodNotAllowed)
@@ -23,7 +24,7 @@ func add_user(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = models.add_user(user)
+    err = models.Add_user(user)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -32,8 +33,8 @@ func add_user(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "You've been added!")
 }
 
-func add_task(w http.ResponseWriter, r *http.Request) {
-    var task Task
+func Add_task(w http.ResponseWriter, r *http.Request) {
+    var task models.Task
     if r.Method != http.MethodPost {
         http.Error(w, "Unsupported request method", http.StatusMethodNotAllowed)
         return
@@ -48,7 +49,7 @@ func add_task(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = models.add_task(task)
+    err = models.Add_task(task)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
