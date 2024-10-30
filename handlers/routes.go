@@ -1,9 +1,24 @@
 package handlers
 
+import (
+    "database/sql"
+    "encoding/json"
+    "fmt"
+    "strconv"
+    "net/http"
+    "github.com/go-chi/chi/v5"
+    "github.com/samiyonas/to-do-API/models"
+)
+
 func Task_by_Id(w http.ResponseWriter, r *http.Request) {
     task_id := chi.URLParam(r, "userID")
 
-    task, err := models.Task_by_Id(task_id)
+    taskId, err := strconv.Atoi(task_id)
+    if err != nil {
+        http.Error(w, "Error retrieveing URL Param", http.StatusInternalServerError)
+    }
+
+    task, err := models.Task_by_Id(taskId)
     if err != nil {
         if err == sql.ErrNoRows{
             http.Error(w, "User not found", http.StatusNotFound)
