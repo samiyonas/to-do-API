@@ -3,11 +3,24 @@ package models
 import (
     "fmt"
     "errors"
-    "log"
     "database/sql"
     "os"
     _ "github.com/go-sql-driver/mysql"
 )
+
+type User struct {
+    Id int `json:"id"`
+    Name string `json:"name"`
+    Email string `json:"email"`
+}
+
+type Task struct {
+    User_id int `json:"user_id"`
+    Id int `json:"id"`
+    Title string `json:"title"`
+    Content string `json:"content"`
+    Done bool `json:"done"`
+}
 
 var db *sql.DB
 
@@ -16,7 +29,7 @@ func init_db() (*sql.DB, error) {
     password := os.Getenv("DB_PASSWD")
     database := os.Getenv("DB")
     dsn := fmt.Sprintf("%s:%s@tcp(localhost:8080)/%s", username, password, database)
-    db, err = sql.Open("mysql", dsn)
+    db, err := sql.Open("mysql", dsn)
     if err != nil {
         return db, errors.New("Error creating the database pointer")
     }
