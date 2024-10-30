@@ -22,22 +22,22 @@ type Task struct {
     Done bool `json:"done"`
 }
 
-var db *sql.DB
+var Db *sql.DB
 
-func init_db() (*sql.DB, error) {
+func Init_db() (*sql.DB, error) {
     username := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWD")
     database := os.Getenv("DB")
     dsn := fmt.Sprintf("%s:%s@tcp(localhost:8080)/%s", username, password, database)
-    db, err := sql.Open("mysql", dsn)
+    Db, err := sql.Open("mysql", dsn)
     if err != nil {
-        return db, errors.New("Error creating the database pointer")
+        return Db, errors.New("Error creating the database pointer")
     }
 
-    return db, nil
+    return Db, nil
 }
 
-func create_tables() (error) {
+func Create_tables() (error) {
     user_table := `CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
@@ -53,12 +53,12 @@ func create_tables() (error) {
         done TINYINT(1) NOT NULL DEFAULT 0
     )`
 
-    _, err := db.Exec(user_table)
+    _, err := Db.Exec(user_table)
     if err != nil {
         return errors.New("error creating table")
     }
 
-    _, err = db.Exec(task_table)
+    _, err = Db.Exec(task_table)
     if err != nil {
         return errors.New("error creating table")
     }
