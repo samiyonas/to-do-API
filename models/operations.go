@@ -55,10 +55,11 @@ func Add_task(task Task) (int64, error) {
 
 func Task_by_Id(id int) (Task, error) {
     var task Task
+    var unusedId interface{}
 
     query := "SELECT * FROM todo WHERE id = ?"
 
-    err := Db.QueryRow(query, id).Scan(&task.User_id, &task.Title, &task.Content, &task.Done)
+    err := Db.QueryRow(query, id).Scan(&task.User_id, &unusedId, &task.Title, &task.Content, &task.Done)
     if err != nil {
         return task, err
     }
