@@ -9,14 +9,12 @@ import (
 )
 
 type User struct {
-    Id int `json:"id"`
     Name string `json:"name"`
     Email string `json:"email"`
 }
 
 type Task struct {
     User_id int `json:"user_id"`
-    Id int `json:"id"`
     Title string `json:"title"`
     Content string `json:"content"`
     Done bool `json:"done"`
