@@ -25,13 +25,14 @@ type Task struct {
 var Db *sql.DB
 
 func Init_db() (*sql.DB, error) {
+    var err error
     username := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWD")
     database := os.Getenv("DB")
     dsn := fmt.Sprintf("%s:%s@tcp(localhost:8080)/%s", username, password, database)
-    Db, err := sql.Open("mysql", dsn)
+    Db, err = sql.Open("mysql", dsn)
     if err != nil {
-        return Db, errors.New("Error creating the database pointer")
+        return Db, errors.New(err.Error())
     }
 
     return Db, nil
@@ -41,7 +42,7 @@ func Create_tables() (error) {
     user_table := `CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
-        email VARCHAR(100) NOT NULL, UNIQUE
+        email VARCHAR(100) NOT NULL UNIQUE
     )`
 
     task_table := `CREATE TABLE IF NOT EXISTS todo (
@@ -55,12 +56,12 @@ func Create_tables() (error) {
 
     _, err := Db.Exec(user_table)
     if err != nil {
-        return errors.New("error creating table")
+        return errors.New(err.Error())
     }
 
     _, err = Db.Exec(task_table)
     if err != nil {
-        return errors.New("error creating table")
+        return errors.New(err.Error())
     }
 
     return nil
