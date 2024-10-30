@@ -24,13 +24,15 @@ func Add_user(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = models.Add_user(user)
+    id, err := models.Add_user(user)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 
-    fmt.Fprintf(w, "You've been added!")
+    ret := fmt.Sprintf("You've been added and your ID is %d", id)
+
+    w.Write([]byte(ret))
 }
 
 func Add_task(w http.ResponseWriter, r *http.Request) {
@@ -49,11 +51,11 @@ func Add_task(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = models.Add_task(task)
+    id, err := models.Add_task(task)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-
-    fmt.Fprintf(w, "Your task has been added!")
+    ret := fmt.Sprintf("Your task has been added! You're task ID is %d", id)
+    w.Write([]byte(ret))
 }
