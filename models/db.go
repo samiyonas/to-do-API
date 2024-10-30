@@ -29,7 +29,7 @@ func Init_db() (*sql.DB, error) {
     username := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWD")
     database := os.Getenv("DB")
-    dsn := fmt.Sprintf("%s:%s@tcp(localhost:8080)/%s", username, password, database)
+    dsn := fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s", username, password, database)
     Db, err = sql.Open("mysql", dsn)
     if err != nil {
         return Db, errors.New(err.Error())
