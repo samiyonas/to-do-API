@@ -3,11 +3,11 @@ package main
 // Entry point of the API
 
 import (
-    "fmt"
-    "net/http"
-    "github.com/samiyonas/to-do-API/handlers"
-    "github.com/samiyonas/to-do-API/models"
-    "github.com/go-chi/chi/v5"
+    "fmt" // For formatting string
+    "net/http" // For http connections and routing
+    "github.com/samiyonas/to-do-API/handlers" // For handling routers
+    "github.com/samiyonas/to-do-API/models" // For Database related functions
+    "github.com/go-chi/chi/v5" // Package for complex routing
 )
 
 func main() {
