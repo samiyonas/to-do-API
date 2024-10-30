@@ -28,6 +28,17 @@ func Add_user(user User) (int64, error) {
 }
 
 func Add_task(task Task) (int64, error) {
+    query := "SELECT * FROM user WHERE id = ?"
+    result, err := Db.Query(query, task.User_id)
+    if err != nil {
+        return -1, errors.New(err.Error())
+    }
+    if !result.Next() {
+        return -1, errors.New(err.Error())
+    }
+
+    result.Close()
+
     cmd := "INSERT INTO todo (user_id, title, content, done) VALUES(?, ?, ?, ?)"
 
     info, err := Db.Exec(cmd, task.User_id, task.Title, task.Content, task.Done)
