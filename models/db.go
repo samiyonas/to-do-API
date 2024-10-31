@@ -1,18 +1,20 @@
 package models
 
 import (
-    "fmt"
-    "errors"
-    "database/sql"
-    "os"
-    _ "github.com/go-sql-driver/mysql"
+    "fmt" // For formatting strings
+    "errors" // For formatting errors
+    "database/sql" // For database connections
+    "os" // To retrieve data from environment variables
+    _ "github.com/go-sql-driver/mysql" // MySQL driver
 )
 
+// User information
 type User struct {
     Name string `json:"name"`
     Email string `json:"email"`
 }
 
+// Task information
 type Task struct {
     User_id int `json:"user_id"`
     Title string `json:"title"`
@@ -20,9 +22,11 @@ type Task struct {
     Done bool `json:"done"`
 }
 
+// Database pointer object
 var Db *sql.DB
 
 func Init_db() (*sql.DB, error) {
+    // database setup
     var err error
     username := os.Getenv("DB_USER")
     password := os.Getenv("DB_PASSWD")
@@ -33,16 +37,19 @@ func Init_db() (*sql.DB, error) {
         return Db, errors.New(err.Error())
     }
 
+    // return the database connection object
     return Db, nil
 }
 
 func Create_tables() (error) {
+    // create a user table
     user_table := `CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE
     )`
 
+    // Create the task table
     task_table := `CREATE TABLE IF NOT EXISTS todo (
         user_id INT,
         FOREIGN KEY(user_id) REFERENCES user(id),
@@ -52,11 +59,13 @@ func Create_tables() (error) {
         done TINYINT(1) NOT NULL DEFAULT 0
     )`
 
+    // Execute the user table creation
     _, err := Db.Exec(user_table)
     if err != nil {
         return errors.New(err.Error())
     }
 
+    // Execute the Task table creation
     _, err = Db.Exec(task_table)
     if err != nil {
         return errors.New(err.Error())
